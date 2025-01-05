@@ -3,7 +3,7 @@ import hardhat from 'hardhat'
 
 const { ethers } = hardhat
 
-const tokens = (n) => ethers.utils.parseUnits(n.toString(), 'ether')
+// const tokens = (n) => ethers.utils.parseUnits(n.toString(), 'ether')
 
 const uriMock = {
   name: 'Luxury NYC Penthouse',
@@ -41,21 +41,28 @@ const uriMock = {
 }
 
 describe('Escrow', () => {
-  let seller, buyer, inspector, lender
+  let seller, inspector, lender
   let realEstate, escrow
 
   it('returns nft address', async () => {
-    ;[seller, buyer, inspector, lender] = await ethers.getSigners()
+    ;[seller, inspector, lender] = await ethers.getSigners()
 
     const RealEstate = await ethers.getContractFactory('RealEstate')
     realEstate = await RealEstate.deploy()
 
-    const transaction = await realEstate.connect(seller).mint(JSON.stringify(uriMock))
+    const transaction = await realEstate
+      .connect(seller)
+      .mint(JSON.stringify(uriMock))
 
     await transaction.wait()
 
     const Escrow = await ethers.getContractFactory('Escrow')
-    escrow = await Escrow.deploy(realEstate.runner.address, seller.address, inspector.address, lender.address)
+    escrow = await Escrow.deploy(
+      realEstate.runner.address,
+      seller.address,
+      inspector.address,
+      lender.address,
+    )
 
     const result = await escrow.nftAddress()
     expect(result).to.be.equal(realEstate.runner.address)
