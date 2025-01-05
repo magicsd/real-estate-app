@@ -12,7 +12,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'tailwind.config.js'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'tailwind.config.js', 'hardhat.config.cjs', 'test/*.js'],
   rules: {
     // 'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     quotes: ['error', 'single'],
