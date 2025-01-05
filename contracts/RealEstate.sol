@@ -10,4 +10,18 @@ contract RealEstate is ERC721URIStorage {
   Counters.Counter private _tokenIds;
 
   constructor() ERC721("D-Real Estate", "DRE") {}
+  
+  function mint(string memory _tokenURI) public returns (uint256) {
+    _tokenIds.increment();
+
+    uint256 newItemId = _tokenIds.current();
+    _mint(msg.sender, newItemId);
+    _setTokenURI(newItemId, _tokenURI);
+
+    return newItemId;
+  }
+
+  function totalSupply() public view returns (uint256) {
+    return _tokenIds.current();
+  }
 }
