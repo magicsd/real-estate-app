@@ -44,7 +44,7 @@ describe('Escrow', () => {
   let seller, inspector, lender
   let realEstate, escrow
 
-  it('returns nft address', async () => {
+  beforeEach(async () => {
     ;[seller, inspector, lender] = await ethers.getSigners()
 
     const RealEstate = await ethers.getContractFactory('RealEstate')
@@ -63,8 +63,29 @@ describe('Escrow', () => {
       inspector.address,
       lender.address,
     )
+  })
 
+  it('returns nft address', async () => {
     const result = await escrow.nftAddress()
+
     expect(result).to.be.equal(realEstate.runner.address)
+  })
+
+  it('returns seller address', async () => {
+    const result = await escrow.seller()
+
+    expect(result).to.be.equal(seller.address)
+  })
+
+  it('returns inspector address', async () => {
+    const result = await escrow.inspector()
+
+    expect(result).to.be.equal(inspector.address)
+  })
+
+  it('returns lender address', async () => {
+    const result = await escrow.lender()
+
+    expect(result).to.be.equal(lender)
   })
 })
