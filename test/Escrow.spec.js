@@ -1,7 +1,5 @@
 import { expect } from 'chai'
-import hardhat from 'hardhat'
-
-const { ethers } = hardhat
+import hre from 'hardhat'
 
 // const tokens = (n) => ethers.utils.parseUnits(n.toString(), 'ether')
 
@@ -45,47 +43,69 @@ describe('Escrow', () => {
   let realEstate, escrow
 
   beforeEach(async () => {
-    ;[seller, inspector, lender] = await ethers.getSigners()
+    ;[seller, inspector, lender] = await hre.ethers.getSigners()
 
-    const RealEstate = await ethers.getContractFactory('RealEstate')
-    realEstate = await RealEstate.deploy()
+    realEstate = await hre.ethers.deployContract('RealEstate')
 
-    const transaction = await realEstate
+    let transaction = await realEstate
       .connect(seller)
       .mint(JSON.stringify(uriMock))
 
     await transaction.wait()
 
-    const Escrow = await ethers.getContractFactory('Escrow')
-    escrow = await Escrow.deploy(
-      realEstate.runner.address,
+    const realEstateAddress = await realEstate.getAddress()
+
+    escrow = await hre.ethers.deployContract('Escrow', [
+      realEstateAddress,
       seller.address,
       inspector.address,
       lender.address,
-    )
+    ])
+
+    const escrowAddress = await escrow.getAddress()
+
+    transaction = await realEstate.connect(seller).approve(escrowAddress, 1)
+    await transaction.wait()
+
+    transaction = await escrow.connect(seller).list(1)
+    await transaction.wait
   })
 
+  // Deployment
   it('returns nft address', async () => {
     const result = await escrow.nftAddress()
 
-    expect(result).to.be.equal(realEstate.runner.address)
+    expect(result).to.equal(await realEstate.getAddress())
   })
 
   it('returns seller address', async () => {
     const result = await escrow.seller()
 
-    expect(result).to.be.equal(seller.address)
+    expect(result).to.equal(seller.address)
   })
 
   it('returns inspector address', async () => {
     const result = await escrow.inspector()
 
-    expect(result).to.be.equal(inspector.address)
+    expect(result).to.equal(inspector.address)
   })
 
   it('returns lender address', async () => {
     const result = await escrow.lender()
 
-    expect(result).to.be.equal(lender)
+    expect(result).to.equal(lender)
+  })
+
+  // Listing
+  it('updates ownership', async () => {
+    const nftOwner = await realEstate.ownerOf(1)
+
+    expect(nftOwner).to.equal(await escrow.getAddress())
+  })
+
+  it('marks nft listed', async () => {
+    const value = await escrow.isListed(1)
+
+    expect(value).to.be.true
   })
 })
