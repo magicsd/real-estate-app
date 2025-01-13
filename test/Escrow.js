@@ -150,7 +150,7 @@ describe('Escrow', () => {
   })
 
   describe('Deposits', () => {
-    it('should be callable only by buyer', async () => {
+    it('should call depositEarnest only by buyer', async () => {
       const transaction = escrow
         .connect(seller)
         .depositEarnest(nftIdMock, { value: getEtherTokens(5) })
@@ -163,15 +163,31 @@ describe('Escrow', () => {
     it('updates contract balance', async () => {
       const earnest = getEtherTokens(5)
 
-      const transaction = await escrow
-        .connect(buyer)
-        .depositEarnest(nftIdMock, { value: earnest })
-
-      await transaction.wait()
+      await escrow.connect(buyer).depositEarnest(nftIdMock, { value: earnest })
 
       const result = await escrow.getBalance()
 
       expect(result).to.equal(earnest)
+    })
+  })
+
+  describe('Inspection', () => {
+    it('should call updateInspectionStatus only by inspector', async () => {
+      const transaction = escrow
+        .connect(seller)
+        .updateInspectionStatus(nftIdMock, true)
+
+      await expect(transaction).to.be.revertedWith(
+        'Only inspector can call this method',
+      )
+    })
+
+    it('updates inspection status', async () => {
+      await escrow.connect(inspector).updateInspectionStatus(nftIdMock, true)
+
+      const result = await escrow.inspectionPassed(nftIdMock)
+
+      expect(result).to.be.true
     })
   })
 })
