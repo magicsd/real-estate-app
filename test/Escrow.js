@@ -78,7 +78,7 @@ describe('Escrow', () => {
     transaction = await escrow
       .connect(seller)
       .list(nftIdMock, buyer.address, purchasePriceMock, escrowAmountMock)
-    await transaction.wait
+    await transaction.wait()
   })
 
   describe('Deployment', () => {
@@ -136,6 +136,16 @@ describe('Escrow', () => {
       const value = await escrow.escrowAmount(nftIdMock)
 
       expect(value).to.equal(escrowAmountMock)
+    })
+
+    it('should revert when non-seller tries to list', async () => {
+      const transaction = escrow
+        .connect(buyer)
+        .list(nftIdMock, buyer.address, purchasePriceMock, escrowAmountMock)
+
+      await expect(transaction).to.be.revertedWith(
+        'Only seller can call this method.',
+      )
     })
   })
 })
