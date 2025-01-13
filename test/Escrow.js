@@ -1,7 +1,9 @@
 import { expect } from 'chai'
 import hre from 'hardhat'
 
-// const tokens = (n) => ethers.utils.parseUnits(n.toString(), 'ether')
+const getEtherTokens = (amount) => {
+  return hre.ethers.parseUnits(amount.toString(), 'ether')
+}
 
 const uriMock = {
   name: 'Luxury NYC Penthouse',
@@ -38,12 +40,16 @@ const uriMock = {
   ],
 }
 
+const nftIdMock = 1
+const purchasePriceMock = getEtherTokens(10)
+const escrowAmountMock = getEtherTokens(5)
+
 describe('Escrow', () => {
-  let seller, inspector, lender
+  let seller, inspector, lender, buyer
   let realEstate, escrow
 
   beforeEach(async () => {
-    ;[seller, inspector, lender] = await hre.ethers.getSigners()
+    ;[seller, inspector, lender, buyer] = await hre.ethers.getSigners()
 
     realEstate = await hre.ethers.deployContract('RealEstate')
 
@@ -64,10 +70,14 @@ describe('Escrow', () => {
 
     const escrowAddress = await escrow.getAddress()
 
-    transaction = await realEstate.connect(seller).approve(escrowAddress, 1)
+    transaction = await realEstate
+      .connect(seller)
+      .approve(escrowAddress, nftIdMock)
     await transaction.wait()
 
-    transaction = await escrow.connect(seller).list(1)
+    transaction = await escrow
+      .connect(seller)
+      .list(nftIdMock, buyer.address, purchasePriceMock, escrowAmountMock)
     await transaction.wait
   })
 
@@ -99,15 +109,33 @@ describe('Escrow', () => {
 
   describe('Listing', () => {
     it('updates ownership', async () => {
-      const nftOwner = await realEstate.ownerOf(1)
+      const nftOwner = await realEstate.ownerOf(nftIdMock)
 
       expect(nftOwner).to.equal(await escrow.getAddress())
     })
 
     it('marks nft listed', async () => {
-      const value = await escrow.isListed(1)
+      const value = await escrow.isListed(nftIdMock)
 
       expect(value).to.be.true
+    })
+
+    it('returns buyer', async () => {
+      const address = await escrow.buyer(nftIdMock)
+
+      expect(address).to.equal(buyer.address)
+    })
+
+    it('returns purchase price', async () => {
+      const price = await escrow.purchasePrice(nftIdMock)
+
+      expect(price).to.equal(purchasePriceMock)
+    })
+
+    it('returns escrow amount', async () => {
+      const value = await escrow.escrowAmount(nftIdMock)
+
+      expect(value).to.equal(escrowAmountMock)
     })
   })
 })
