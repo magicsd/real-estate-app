@@ -144,8 +144,34 @@ describe('Escrow', () => {
         .list(nftIdMock, buyer.address, purchasePriceMock, escrowAmountMock)
 
       await expect(transaction).to.be.revertedWith(
-        'Only seller can call this method.',
+        'Only seller can call this method',
       )
+    })
+  })
+
+  describe('Deposits', () => {
+    it('should be callable only by buyer', async () => {
+      const transaction = escrow
+        .connect(seller)
+        .depositEarnest(nftIdMock, { value: getEtherTokens(5) })
+
+      await expect(transaction).to.be.revertedWith(
+        'Only buyer can call this method',
+      )
+    })
+
+    it('updates contract balance', async () => {
+      const earnest = getEtherTokens(5)
+
+      const transaction = await escrow
+        .connect(buyer)
+        .depositEarnest(nftIdMock, { value: earnest })
+
+      await transaction.wait()
+
+      const result = await escrow.getBalance()
+
+      expect(result).to.equal(earnest)
     })
   })
 })
