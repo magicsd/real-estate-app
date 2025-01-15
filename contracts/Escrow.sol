@@ -71,22 +71,30 @@ contract Escrow {
     inspectionPassed[_nftID] = _isPassed;
   } 
 
-  function getBalance() public view returns (uint256) {
-    return address(this).balance;
-  }
-
   function approveSale(uint256 _nftID) public {
     approval[_nftID][msg.sender] = true;
   }
 
-  receive() external payable {}
+  function cancelSale(uint _nftID) public {
+    if (inspectionPassed[_nftID]) {
+      payable(seller).transfer(address(this).balance);
+    } else {
+      payable(buyer[_nftID]).transfer(address(this).balance); 
+    }
+  }
 
   function finalizeSell(uint _nftID) public onlySeller {
-    require(inspectionPassed[_nftID], "Inspection not passed");
-    require(approval[_nftID][buyer[_nftID]], "Not approved by buyer");
-    require(approval[_nftID][seller], "Not approved by seller");
-    require(approval[_nftID][lender], "Not approved by lender");
-    require(address(this).balance >= purchasePrice[_nftID], "Balance is not enough");
+    if (
+      !inspectionPassed[_nftID] ||
+      !approval[_nftID][buyer[_nftID]] ||
+      !approval[_nftID][seller] ||
+      !approval[_nftID][lender] ||
+      address(this).balance < purchasePrice[_nftID]
+    ) {
+      cancelSale(_nftID);
+
+      return;
+    }
 
     isListed[_nftID] = false;
 
@@ -95,5 +103,11 @@ contract Escrow {
     require(success, "Transaction failed");
 
     IERC721(nftAddress).transferFrom(address(this), buyer[_nftID], _nftID);
+  }
+
+  receive() external payable {}
+
+  function getBalance() public view returns (uint256) {
+    return address(this).balance;
   }
 }
