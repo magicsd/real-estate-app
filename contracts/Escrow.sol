@@ -20,6 +20,7 @@ contract Escrow {
   mapping(uint256 => uint256) public escrowAmount;
   mapping(uint256 => address) public buyer;
   mapping(uint256 => bool) public inspectionPassed;
+  mapping(uint256 => mapping(address => bool)) public approval;
 
   modifier onlySeller() {
     require(msg.sender == seller, "Only seller can call this method");
@@ -68,9 +69,13 @@ contract Escrow {
 
   function updateInspectionStatus(uint _nftID, bool _isPassed) public onlyInspector {
     inspectionPassed[_nftID] = _isPassed;
-  }
+  } 
 
   function getBalance() public view returns (uint256) {
     return address(this).balance;
+  }
+
+  function approveSale(uint256 _nftID) public {
+    approval[_nftID][msg.sender] = true;
   }
 }

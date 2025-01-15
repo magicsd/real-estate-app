@@ -190,4 +190,16 @@ describe('Escrow', () => {
       expect(result).to.be.true
     })
   })
+
+  describe('Approval', () => {
+    it('updates approval status ', async () => {
+      await escrow.connect(buyer).approveSale(nftIdMock)
+      await escrow.connect(seller).approveSale(nftIdMock)
+      await escrow.connect(lender).approveSale(nftIdMock)
+
+      expect(await escrow.approval(nftIdMock, buyer.address)).to.be  .true
+      expect(await escrow.approval(nftIdMock, seller.address)).to.be.true
+      expect(await escrow.approval(nftIdMock, lender.address)).to.be.true
+    })
+  })
 })
