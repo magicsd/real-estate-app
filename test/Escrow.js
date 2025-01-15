@@ -53,11 +53,7 @@ describe('Escrow', () => {
 
     realEstate = await hre.ethers.deployContract('RealEstate')
 
-    let transaction = await realEstate
-      .connect(seller)
-      .mint(JSON.stringify(uriMock))
-
-    await transaction.wait()
+    await realEstate.connect(seller).mint(JSON.stringify(uriMock))
 
     const realEstateAddress = await realEstate.getAddress()
 
@@ -70,15 +66,11 @@ describe('Escrow', () => {
 
     const escrowAddress = await escrow.getAddress()
 
-    transaction = await realEstate
-      .connect(seller)
-      .approve(escrowAddress, nftIdMock)
-    await transaction.wait()
+    await realEstate.connect(seller).approve(escrowAddress, nftIdMock)
 
-    transaction = await escrow
+    await escrow
       .connect(seller)
       .list(nftIdMock, buyer.address, purchasePriceMock, escrowAmountMock)
-    await transaction.wait()
   })
 
   describe('Deployment', () => {
@@ -197,9 +189,42 @@ describe('Escrow', () => {
       await escrow.connect(seller).approveSale(nftIdMock)
       await escrow.connect(lender).approveSale(nftIdMock)
 
-      expect(await escrow.approval(nftIdMock, buyer.address)).to.be  .true
+      expect(await escrow.approval(nftIdMock, buyer.address)).to.be.true
       expect(await escrow.approval(nftIdMock, seller.address)).to.be.true
       expect(await escrow.approval(nftIdMock, lender.address)).to.be.true
+    })
+  })
+
+  describe('Sell', () => {
+    beforeEach(async () => {
+      await escrow
+        .connect(buyer)
+        .depositEarnest(nftIdMock, { value: escrowAmountMock })
+
+      await escrow.connect(inspector).updateInspectionStatus(nftIdMock, true)
+
+      await escrow.connect(buyer).approveSale(nftIdMock)
+      await escrow.connect(seller).approveSale(nftIdMock)
+      await escrow.connect(lender).approveSale(nftIdMock)
+
+      await lender.sendTransaction({
+        to: escrow.getAddress(),
+        value: getEtherTokens(5),
+      })
+
+      await escrow.connect(seller).finalizeSell(nftIdMock)
+    })
+
+    it('updates balance', async () => {
+      expect(await escrow.getBalance()).to.equal(0)
+    })
+
+    it('updates ownership', async () => {
+      expect(await realEstate.ownerOf(nftIdMock)).to.equal(buyer.address)
+    })
+
+    it('updates nft listing status', async () => {
+      expect(await escrow.isListed(nftIdMock)).to.be.false
     })
   })
 })
