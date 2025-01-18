@@ -9,7 +9,9 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "local-deploy": "hardhat run scripts/deploy.js --network localhost"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.1.0",
