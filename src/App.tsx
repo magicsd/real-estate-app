@@ -18,6 +18,20 @@ const typedConfig: Config = config
 
 type ProviderState = BrowserProvider | AbstractProvider | null
 
+type Trait = {
+  trait_type: string
+  value: string | number
+}
+
+type Home = {
+  id: string
+  name: string
+  description: string
+  address: string
+  image: string
+  attributes: Trait[]
+}
+
 function App() {
   const [provider, setProvider] = useState<ProviderState>(null)
 
@@ -25,6 +39,8 @@ function App() {
     useState<ethers.Contract>()
 
   const [escrowContract, setEscrowContract] = useState<ethers.Contract>()
+
+  const [homes, setHomes] = useState<Home[]>([])
 
   const loadBlockchainData = async () => {
     let provider = null
@@ -43,17 +59,31 @@ function App() {
 
     const contractConfig = typedConfig[network.chainId.toString()]
 
-    setRealEstateContract(
-      new ethers.Contract(
-        contractConfig.realEstate.address,
-        RealEstateABI,
-        provider,
-      ),
+    const realEstateContract = new ethers.Contract(
+      contractConfig.realEstate.address,
+      RealEstateABI,
+      provider,
     )
+
+    setRealEstateContract(realEstateContract)
 
     setEscrowContract(
       new ethers.Contract(contractConfig.escrow.address, EscrowABI, provider),
     )
+
+    const totalSupply = await realEstateContract.totalSupply()
+    const homes = []
+
+    for (let i = 1; i <= totalSupply; i++) {
+      const uri = await realEstateContract.tokenURI(i)
+
+      const response = await fetch(uri)
+      const home = await response.json()
+
+      homes.push(home)
+    }
+
+    setHomes(homes)
   }
 
   useEffect(() => {
@@ -78,17 +108,26 @@ function App() {
           </h1>
         </div>
         <div className="p-6 w-full max-w-5xl mx-auto">
-          <h3 className="text-2xl mb-6">Homes for you</h3>
+          <h3 className="text-2xl mb-6 tracking-tight">Homes for you</h3>
           <ul className="grid grid-cols-3 gap-6">
-            <li>
-              <EstateCard />
-            </li>
-            <li>
-              <EstateCard />
-            </li>
-            <li>
-              <EstateCard />
-            </li>
+            {homes.map((home) => {
+              const [price, type, beds, baths, sqft, year] = home.attributes
+
+              return (
+                <li key={home.id}>
+                  <EstateCard
+                    description={home.description}
+                    title={home.name}
+                    imageURL={home.image}
+                    purchasePrice={price.value as number}
+                    bedCount={beds.value as number}
+                    bathCount={baths.value as number}
+                    sqft={sqft.value as number}
+                    address={home.address}
+                  />
+                </li>
+              )
+            })}
           </ul>
         </div>
       </main>
