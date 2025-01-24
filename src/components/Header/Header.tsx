@@ -9,7 +9,7 @@ const Header = ({
   onWalletButtonClick: () => Promise<void>
 }) => {
   return (
-    <header className="h-14 flex items-center px-6 gap-6">
+    <header className="h-14 flex items-center px-6 gap-6 max-w-5xl mx-auto">
       <div className="flex">
         <Home className="text-black" size={32} />
         <Home className="text-purple-700 -translate-x-4" size={32} />
