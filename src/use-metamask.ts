@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from 'react'
 
 const useMetamask = () => {
   const [account, setAccount] = useState<string | null>(null)
@@ -11,7 +11,7 @@ const useMetamask = () => {
     }
   }
 
-  const loadAccounts = useCallback(async () => {
+  const connect = useCallback(async () => {
     const accounts = await window.ethereum?.request({ method: 'eth_accounts' })
 
     handleAccountsChanged(accounts)
@@ -24,16 +24,16 @@ const useMetamask = () => {
       return
     }
 
-    loadAccounts()
+    connect()
 
     window.ethereum.on('accountsChanged', handleAccountsChanged)
 
     return () => {
       window.ethereum?.removeListener('accountsChanged', handleAccountsChanged)
     }
-  }, [loadAccounts])
+  }, [connect])
 
-  return { account, loadAccounts }
+  return { account, connect }
 }
 
 export default useMetamask
