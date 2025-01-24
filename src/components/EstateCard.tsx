@@ -1,6 +1,6 @@
 const EstateCard = () => {
   return (
-    <div className="rounded border min-w-48 flex flex-col">
+    <div className="rounded border border-gray-300 min-w-48 flex flex-col">
       <img
         src="https://cdn.houseplansservices.com/product/4ii30750sht8m9orfeoc1idues/w800x533.jpg?v=2"
         alt=""

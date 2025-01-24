@@ -4,20 +4,56 @@ import useMetamask from './use-metamask'
 import { Header } from '@/components/Header'
 import EstateCard from '@/components/EstateCard.tsx'
 
+import RealEstateABI from './abis/RealEstate.json'
+import EscrowABI from './abis/Escrow.json'
+
+import config from './config.json'
+
+type Config = Record<
+  string,
+  Record<'realEstate' | 'escrow', Record<'address', string>>
+>
+
+const typedConfig: Config = config
+
 type ProviderState = BrowserProvider | AbstractProvider | null
 
 function App() {
   const [provider, setProvider] = useState<ProviderState>(null)
 
+  const [realEstateContract, setRealEstateContract] =
+    useState<ethers.Contract>()
+
+  const [escrowContract, setEscrowContract] = useState<ethers.Contract>()
+
   const loadBlockchainData = async () => {
+    let provider = null
+
     if (!window.ethereum) {
       console.log('Metamask not installed, using default provider.')
 
-      setProvider(ethers.getDefaultProvider())
+      provider = ethers.getDefaultProvider()
     } else {
-      const provider = new BrowserProvider(window.ethereum)
-      setProvider(provider)
+      provider = new BrowserProvider(window.ethereum)
     }
+
+    setProvider(provider)
+
+    const network = await provider.getNetwork()
+
+    const contractConfig = typedConfig[network.chainId.toString()]
+
+    setRealEstateContract(
+      new ethers.Contract(
+        contractConfig.realEstate.address,
+        RealEstateABI,
+        provider,
+      ),
+    )
+
+    setEscrowContract(
+      new ethers.Contract(contractConfig.escrow.address, EscrowABI, provider),
+    )
   }
 
   useEffect(() => {
