@@ -5,6 +5,7 @@ import RealEstateABI from './abis/RealEstate.json'
 import EscrowABI from './abis/Escrow.json'
 
 import configJSON from './config.json'
+import type { Home } from './types.ts'
 
 type Config = Record<
   string,
@@ -14,20 +15,6 @@ type Config = Record<
 const config: Config = configJSON
 
 type ProviderState = BrowserProvider | AbstractProvider | null
-
-type Trait = {
-  trait_type: string
-  value: string | number
-}
-
-type Home = {
-  id: string
-  name: string
-  description: string
-  address: string
-  image: string
-  attributes: Trait[]
-}
 
 const useBlockchainData = () => {
   const [provider, setProvider] = useState<ProviderState>(null)

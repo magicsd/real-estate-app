@@ -1,8 +1,9 @@
-import useMetamask from './use-metamask'
 import { Header } from '@/components/Header'
-import EstateCard from '@/components/EstateCard.tsx'
+import EstateCard from '@/components/EstateCard'
+import PreviewModal from '@/components/PreviewModal'
 
 import useBlockchainData from './use-blockchain-data.ts'
+import useMetamask from './use-metamask'
 
 function App() {
   const { homes } = useBlockchainData()
@@ -28,20 +29,22 @@ function App() {
           <h3 className="text-2xl mb-6 tracking-tight">Homes for you</h3>
           <ul className="grid grid-cols-3 gap-6">
             {homes.map((home) => {
-              const [price, type, beds, baths, sqft, year] = home.attributes
+              const [price, , beds, baths, sqft] = home.attributes
 
               return (
                 <li key={home.id}>
-                  <EstateCard
-                    description={home.description}
-                    title={home.name}
-                    imageURL={home.image}
-                    purchasePrice={price.value as number}
-                    bedCount={beds.value as number}
-                    bathCount={baths.value as number}
-                    sqft={sqft.value as number}
-                    address={home.address}
-                  />
+                  <PreviewModal home={home}>
+                    <EstateCard
+                      description={home.description}
+                      title={home.name}
+                      imageURL={home.image}
+                      purchasePrice={price.value as number}
+                      bedCount={beds.value as number}
+                      bathCount={baths.value as number}
+                      sqft={sqft.value as number}
+                      address={home.address}
+                    />
+                  </PreviewModal>
                 </li>
               )
             })}
