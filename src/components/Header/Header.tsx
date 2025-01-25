@@ -5,7 +5,7 @@ const Header = ({
   account,
   onWalletButtonClick,
 }: {
-  account: string | null
+  account?: string
   onWalletButtonClick: () => Promise<void>
 }) => {
   return (

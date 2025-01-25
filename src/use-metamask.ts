@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 const useMetamask = () => {
-  const [account, setAccount] = useState<string | null>(null)
+  const [account, setAccount] = useState<string>()
 
   const handleAccountsChanged = (accounts: string[]) => {
     if (accounts.length === 0) {

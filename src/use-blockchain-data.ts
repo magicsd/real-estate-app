@@ -14,10 +14,10 @@ type Config = Record<
 
 const config: Config = configJSON
 
-type ProviderState = BrowserProvider | AbstractProvider | null
+export type ProviderState = BrowserProvider | AbstractProvider
 
 const useBlockchainData = () => {
-  const [provider, setProvider] = useState<ProviderState>(null)
+  const [provider, setProvider] = useState<ProviderState>()
 
   const [realEstateContract, setRealEstateContract] =
     useState<ethers.Contract>()
