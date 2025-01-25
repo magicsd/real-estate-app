@@ -1,6 +1,7 @@
 import Link from './Link'
 import Logo from './Logo'
 import { Button } from '@/components/ui/button'
+import { Menu } from 'lucide-react'
 import { getAddressShortcut } from '@/lib'
 
 const Navigation = ({
@@ -17,8 +18,10 @@ const Navigation = ({
           <div className="flex-1">
             <button
               type="button"
-              className="size-8 rounded border border-gray-900 flex sm:hidden"
-            />
+              className="size-8 flex items-center justify-center sm:hidden"
+            >
+              <Menu size="24" />
+            </button>
 
             <ul className="items-center gap-12 text-sm font-semibold hidden sm:flex">
               <li>
