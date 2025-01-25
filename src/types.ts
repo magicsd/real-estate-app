@@ -1,3 +1,7 @@
+import { ethers } from 'ethers'
+
+export type Contract = ethers.Contract
+
 type Trait = {
   trait_type: string
   value: string | number

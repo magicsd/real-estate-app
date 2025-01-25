@@ -5,7 +5,7 @@ import RealEstateABI from './abis/RealEstate.json'
 import EscrowABI from './abis/Escrow.json'
 
 import configJSON from './config.json'
-import type { Home } from './types.ts'
+import type { Contract, Home } from './types.ts'
 
 type Config = Record<
   string,
@@ -19,10 +19,9 @@ export type ProviderState = BrowserProvider | AbstractProvider
 const useBlockchainData = () => {
   const [provider, setProvider] = useState<ProviderState>()
 
-  const [realEstateContract, setRealEstateContract] =
-    useState<ethers.Contract>()
+  const [realEstateContract, setRealEstateContract] = useState<Contract>()
 
-  const [escrowContract, setEscrowContract] = useState<ethers.Contract>()
+  const [escrowContract, setEscrowContract] = useState<Contract>()
 
   const [homes, setHomes] = useState<Home[]>([])
 

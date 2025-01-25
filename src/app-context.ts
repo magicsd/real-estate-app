@@ -1,13 +1,13 @@
 import type { ProviderState } from './use-blockchain-data'
+import type { Contract } from '@/types'
 
-import { ethers } from 'ethers'
 import createContext from '@/lib/create-context'
 
 type AppContext = {
   account?: string
   provider?: ProviderState
-  realEstateContract?: ethers.Contract
-  escrowContract?: ethers.Contract
+  realEstateContract?: Contract
+  escrowContract?: Contract
 }
 
 const [AppContextProvider, useAppContext] = createContext<AppContext>({
