@@ -5,19 +5,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import Actions from './Actions'
 
 import { useAppContext } from '@/app-context'
-import useEscrowDetails from '@/hooks/use-escrow-details'
+import { useEscrowDetails } from '@/hooks'
 
 const Content = ({ home }: { home: Home }) => {
   const [price, ...restAttributes] = home.attributes
 
-  const { escrowContract } = useAppContext()
+  const { escrowContract, account } = useAppContext()
 
   const details = useEscrowDetails(escrowContract, home.id)
-
-  console.log('---details', details)
 
   return (
     <DialogHeader>
@@ -37,9 +35,12 @@ const Content = ({ home }: { home: Home }) => {
             {home.description}
           </DialogDescription>
 
-          <div className="grid grid-cols-2 gap-4 mt-6">
-            <Button>Pay {price.value} ETH</Button>
-            <Button variant="secondary">Contact Agent</Button>
+          <div className="mt-6">
+            <Actions
+              account={account}
+              details={details}
+              price={price.value as number}
+            />
           </div>
 
           <hr className="mt-6" />

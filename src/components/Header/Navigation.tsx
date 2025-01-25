@@ -1,6 +1,7 @@
 import Link from './Link'
 import Logo from './Logo'
 import { Button } from '@/components/ui/button'
+import { getAddressShortcut } from '@/lib'
 
 const Navigation = ({
   account,
@@ -42,7 +43,7 @@ const Navigation = ({
                 title={account}
                 className="h-10 px-4 flex items-center text-sm cursor-default"
               >
-                {`${account.slice(0, 6)}...${account.slice(-5)}`}
+                {getAddressShortcut(account)}
               </div>
             ) : (
               <Button

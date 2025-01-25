@@ -58,7 +58,7 @@ const useEscrowDetails = (escrowContract?: Contract, homeId?: Home['id']) => {
   useEffect(() => {
     fetchDetails()
     fetchOwner()
-  }, [fetchDetails, fetchOwner])
+  }, [fetchDetails, fetchOwner, hasSold])
 
   return {
     buyer,
@@ -72,5 +72,7 @@ const useEscrowDetails = (escrowContract?: Contract, homeId?: Home['id']) => {
     hasInspected,
   }
 }
+
+export type UseEscrowDetailsReturn = ReturnType<typeof useEscrowDetails>
 
 export default useEscrowDetails

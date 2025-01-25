@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { type AbstractProvider, BrowserProvider, ethers } from 'ethers'
+import { BrowserProvider, ethers } from 'ethers'
 
-import RealEstateABI from './abis/RealEstate.json'
-import EscrowABI from './abis/Escrow.json'
+import RealEstateABI from '../abis/RealEstate.json'
+import EscrowABI from '../abis/Escrow.json'
 
-import configJSON from './config.json'
-import type { Contract, Home } from './types.ts'
+import configJSON from '../config.json'
+import type { Contract, Home, ProviderState } from '@/types.ts'
 
 type Config = Record<
   string,
@@ -13,8 +13,6 @@ type Config = Record<
 >
 
 const config: Config = configJSON
-
-export type ProviderState = BrowserProvider | AbstractProvider
 
 const useBlockchainData = () => {
   const [provider, setProvider] = useState<ProviderState>()

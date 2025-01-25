@@ -1,7 +1,6 @@
-import type { ProviderState } from './use-blockchain-data'
-import type { Contract } from '@/types'
+import type { Contract, ProviderState } from '@/types'
 
-import createContext from '@/lib/create-context'
+import { createContext } from '@/lib'
 
 type AppContext = {
   account?: string

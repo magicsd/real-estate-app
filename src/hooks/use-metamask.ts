@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
-const useMetamask = () => {
+const useMetaMask = () => {
   const [account, setAccount] = useState<string>()
 
   const handleAccountsChanged = (accounts: string[]) => {
@@ -36,4 +36,4 @@ const useMetamask = () => {
   return { account, connect }
 }
 
-export default useMetamask
+export default useMetaMask

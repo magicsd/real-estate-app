@@ -1,8 +1,7 @@
 import { Header } from '@/components/Header'
 import { HomeList } from '@/components/HomeList'
 
-import useBlockchainData from './use-blockchain-data'
-import useMetamask from './use-metamask'
+import { useBlockchainData, useMetaMask } from './hooks'
 import { AppContextProvider } from './app-context'
 import { useMemo } from 'react'
 
@@ -10,7 +9,7 @@ function App() {
   const { homes, provider, escrowContract, realEstateContract } =
     useBlockchainData()
 
-  const { account, connect } = useMetamask()
+  const { account, connect } = useMetaMask()
 
   const appContextValue = useMemo(
     () => ({
