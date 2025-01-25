@@ -1,8 +1,8 @@
 import type { Home } from '@/types'
 
-import PreviewModal from './PreviewModal'
-import EstateCard from './EstateCard'
 import { clsx } from 'clsx'
+import { PreviewModal } from './PreviewModal'
+import EstateCard from './EstateCard'
 
 const HomeList = ({
   className,
