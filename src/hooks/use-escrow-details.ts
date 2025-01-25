@@ -42,10 +42,6 @@ const useEscrowDetails = (escrowContract: Contract, homeId: Home['id']) => {
   }, [escrowContract, homeId])
 
   const fetchOwner = useCallback(async () => {
-    const isListed = await escrowContract.isListed(homeId)
-
-    if (!isListed) return
-
     const owner = await escrowContract.buyer(homeId)
 
     setOwner(owner.toLowerCase())

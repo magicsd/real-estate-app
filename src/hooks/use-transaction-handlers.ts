@@ -51,6 +51,7 @@ const useTransactionHandlers = ({
     const signer = await provider.getSigner()
 
     const signedEscrow = escrowContract.connect(signer) as Contract
+
     await signedEscrow.approveSale(homeId)
 
     await signedEscrow.finalizeSell(homeId)

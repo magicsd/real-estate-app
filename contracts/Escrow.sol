@@ -50,8 +50,8 @@ contract Escrow {
   }
 
   function list(
-    uint256 _nftID, 
-    address _buyer, 
+    uint256 _nftID,
+    address _buyer,
     uint256 _purchasePrice,
     uint256 _escrowAmount
     ) public payable onlySeller {
@@ -69,7 +69,7 @@ contract Escrow {
 
   function updateInspectionStatus(uint _nftID, bool _isPassed) public onlyInspector {
     inspectionPassed[_nftID] = _isPassed;
-  } 
+  }
 
   function approveSale(uint256 _nftID) public {
     approval[_nftID][msg.sender] = true;
@@ -79,7 +79,7 @@ contract Escrow {
     if (inspectionPassed[_nftID]) {
       payable(seller).transfer(address(this).balance);
     } else {
-      payable(buyer[_nftID]).transfer(address(this).balance); 
+      payable(buyer[_nftID]).transfer(address(this).balance);
     }
   }
 
