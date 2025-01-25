@@ -1,5 +1,6 @@
-import { Home } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Logo from './Logo'
+import Link from './Link'
 
 const Header = ({
   account,
@@ -9,30 +10,32 @@ const Header = ({
   onWalletButtonClick: () => Promise<void>
 }) => {
   return (
-    <header className="h-14 flex items-center px-6 gap-6 max-w-5xl mx-auto">
-      <div className="flex">
-        <Home className="text-black" size={32} />
-        <Home className="text-purple-700 -translate-x-4" size={32} />
-        <Home className="text-black -translate-x-8" size={32} />
-      </div>
-      <nav className="ml-auto mr-6">
-        <ul className="flex items-center gap-6">
+    <header className="flex items-center justify-between p-6 gap-6 max-w-5xl mx-auto">
+      <nav className="flex-1">
+        <ul className="flex items-center gap-12 text-sm font-semibold">
           <li>
-            <a href="#">Buy</a>
+            <Link href="#">Buy</Link>
           </li>
           <li>
-            <a href="#">Rent</a>
+            <Link href="#">Rent</Link>
           </li>
           <li>
-            <a href="#">Sell</a>
+            <Link href="#">Sell</Link>
           </li>
         </ul>
       </nav>
-      <Button onClick={onWalletButtonClick} disabled={Boolean(account)}>
-        {account
-          ? `${account.slice(0, 7)}...${account.slice(-5)}`
-          : 'Connect Wallet'}
-      </Button>
+
+      <a href="/">
+        <Logo />
+      </a>
+
+      <div className="flex justify-end flex-1">
+        <Button onClick={onWalletButtonClick} disabled={Boolean(account)}>
+          {account
+            ? `${account.slice(0, 7)}...${account.slice(-5)}`
+            : 'Connect Wallet'}
+        </Button>
+      </div>
     </header>
   )
 }
