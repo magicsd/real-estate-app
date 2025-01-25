@@ -7,8 +7,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 
-import type { Home } from '@/types.ts'
-import { Button } from '@/components/ui/button.tsx'
+import type { Home } from '@/types'
+import { Button } from '@/components/ui/button'
 
 const PreviewModal = ({
   children,

@@ -1,6 +1,5 @@
 import { Header } from '@/components/Header'
-import EstateCard from '@/components/EstateCard'
-import PreviewModal from '@/components/PreviewModal'
+import { HomeList } from '@/components/HomeList'
 
 import useBlockchainData from './use-blockchain-data.ts'
 import useMetamask from './use-metamask'
@@ -11,45 +10,17 @@ function App() {
   const { account, connect } = useMetamask()
 
   return (
-    <div className="min-h-screen">
+    <div className="bg-white">
       <Header account={account} onWalletButtonClick={connect} />
       <main className="flex flex-col items-center justify-center">
-        <div
-          className="bg-top bg-cover w-full flex items-center justify-center min-h-64"
-          style={{
-            backgroundImage:
-              'url(https://cdn.wallpapersafari.com/88/57/1mqjvO.jpg)',
-          }}
-        >
-          <h1 className="text-5xl font-extrabold tracking-tight text-white">
-            D-Real Estate
-          </h1>
-        </div>
-        <div className="p-6 w-full max-w-5xl mx-auto">
-          <h3 className="text-2xl mb-6 tracking-tight">Homes for you</h3>
-          <ul className="grid grid-cols-3 gap-6">
-            {homes.map((home) => {
-              const [price, , beds, baths, sqft] = home.attributes
-
-              return (
-                <li key={home.id}>
-                  <PreviewModal home={home}>
-                    <EstateCard
-                      description={home.description}
-                      title={home.name}
-                      imageURL={home.image}
-                      purchasePrice={price.value as number}
-                      bedCount={beds.value as number}
-                      bathCount={baths.value as number}
-                      sqft={sqft.value as number}
-                      address={home.address}
-                    />
-                  </PreviewModal>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
+        <section className="w-full bg-gray-50">
+          <div className="py-32 px-8">
+            <h3 className="text-2xl tracking-tight font-bold capitalize">
+              Homes for you
+            </h3>
+            <HomeList homes={homes} className="mt-6" />
+          </div>
+        </section>
       </main>
     </div>
   )
