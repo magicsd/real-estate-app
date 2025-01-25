@@ -1,36 +1,22 @@
-# React + TypeScript + Vite + Tailwind
+# D-Real Estate
+
+## Description
+
+D-Real Estate is a decentralized real estate platform that allows users to buy, sell, and rent properties using cryptocurrencies. 
+The platform is built on the Ethereum blockchain and uses smart contracts to facilitate transactions. 
+Users can list their properties on the platform, search for properties, and make offers using cryptocurrency. 
+The platform also includes a reputation system to help users build trust and verify the authenticity of listings. 
+D-Real Estate aims to provide a secure and transparent way to buy, sell, and rent properties using blockchain technology.
+
+#### Solidity + Hardhat + React + TypeScript + Vite + Tailwind
 
 This template provides a minimal setup to get React working in Vite, TypeScript, and Tailwind.
 
-## Getting Started 🚀
+### Scripts
 
-1. Clone the repo.
-2. Install dependencies: `pnpm install`
-3. Start the dev server: `pnpm dev`
-
-### Or
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fvite-react-tailwind-starter)
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```bash
+pnpm dev # start dev server
+pnpm node # start hardhat node
+pnpm local-deploy # deploy contract to local node
+pnpm test # run tests
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-
-## License 📄
-
-[MIT License](https://github.com/moinulmoin/vite-react-tailwind-starter/blob/master/LICENSE)
