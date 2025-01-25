@@ -19,25 +19,25 @@ const useEscrowDetails = (escrowContract?: Contract, homeId?: Home['id']) => {
     if (!escrowContract || !homeId) return
 
     const buyer = await escrowContract.buyer(homeId)
-    setBuyer(buyer)
+    setBuyer(buyer.toLowerCase())
 
     const hasBought = await escrowContract.approval(homeId, buyer)
     setHasBought(hasBought)
 
     const seller = await escrowContract.seller()
-    setSeller(seller)
+    setSeller(seller.toLowerCase())
 
     const hasSold = await escrowContract.approval(homeId, seller)
     setHasSold(hasSold)
 
     const lender = await escrowContract.lender()
-    setLender(lender)
+    setLender(lender.toLowerCase())
 
     const hasLent = await escrowContract.approval(homeId, lender)
     setHasLent(hasLent)
 
     const inspector = await escrowContract.inspector()
-    setInspector(inspector)
+    setInspector(inspector.toLowerCase())
 
     const hasInspected = await escrowContract.inspectionPassed(homeId)
     setHasInspected(hasInspected)

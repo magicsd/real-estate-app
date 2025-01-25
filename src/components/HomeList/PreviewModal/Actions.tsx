@@ -13,14 +13,23 @@ const SubmitButton = ({
   account?: string
   price: number
 }) => {
-  const { buyer, seller, lender, inspector } = details
+  const {
+    buyer,
+    seller,
+    lender,
+    inspector,
+    hasInspected,
+    hasLent,
+    hasSold,
+    hasBought,
+  } = details
 
   if (!buyer || !seller || !lender || !inspector) return null
 
-  const isBuyer = buyer.toLowerCase() === account
-  const isSeller = seller.toLowerCase() === account
-  const isLender = lender.toLowerCase() === account
-  const isInspector = inspector.toLowerCase() === account
+  const isBuyer = buyer === account
+  const isSeller = seller === account
+  const isLender = lender === account
+  const isInspector = inspector === account
 
   if (isBuyer) {
     return (
@@ -34,18 +43,18 @@ const SubmitButton = ({
   }
 
   if (isInspector) {
-    return <Button>Approve Inspection</Button>
+    return <Button disabled={hasInspected}>Approve Inspection</Button>
   }
 
   if (isLender) {
-    return <Button>Approve & Lend</Button>
+    return <Button disabled={hasLent}>Approve & Lend</Button>
   }
 
   if (isSeller) {
-    return <Button>Approve & Sell</Button>
+    return <Button disabled={hasSold}>Approve & Sell</Button>
   }
 
-  return <Button>Pay {price} ETH</Button>
+  return <Button disabled={hasBought}>Pay {price} ETH</Button>
 }
 
 const Actions = ({

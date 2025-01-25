@@ -11,7 +11,7 @@ import { useAppContext } from '@/app-context'
 import { useEscrowDetails } from '@/hooks'
 
 const Content = ({ home }: { home: Home }) => {
-  const [price, ...restAttributes] = home.attributes
+  const [price] = home.attributes
 
   const { escrowContract, account } = useAppContext()
 
@@ -52,7 +52,7 @@ const Content = ({ home }: { home: Home }) => {
               role="list"
               className="mt-4 text-gray-500 text-sm list-disc pl-5 space-y-1"
             >
-              {restAttributes.map((attr) => (
+              {home.attributes.map((attr) => (
                 <li className="pl-2" key={attr.trait_type}>
                   <span>{attr.trait_type}</span>: {attr.value}
                 </li>
