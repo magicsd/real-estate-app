@@ -2,7 +2,7 @@ import type { Contract, Home } from '@/types'
 
 import { useCallback, useEffect, useState } from 'react'
 
-const useEscrowDetails = (escrowContract?: Contract, homeId?: Home['id']) => {
+const useEscrowDetails = (escrowContract: Contract, homeId: Home['id']) => {
   const [buyer, setBuyer] = useState<string>()
   const [seller, setSeller] = useState<string>()
   const [lender, setLender] = useState<string>()
@@ -16,8 +16,6 @@ const useEscrowDetails = (escrowContract?: Contract, homeId?: Home['id']) => {
   const [hasInspected, setHasInspected] = useState(false)
 
   const fetchDetails = useCallback(async () => {
-    if (!escrowContract || !homeId) return
-
     const buyer = await escrowContract.buyer(homeId)
     setBuyer(buyer.toLowerCase())
 
@@ -44,15 +42,13 @@ const useEscrowDetails = (escrowContract?: Contract, homeId?: Home['id']) => {
   }, [escrowContract, homeId])
 
   const fetchOwner = useCallback(async () => {
-    if (!escrowContract || !homeId) return
-
     const isListed = await escrowContract.isListed(homeId)
 
     if (!isListed) return
 
     const owner = await escrowContract.buyer(homeId)
 
-    setOwner(owner)
+    setOwner(owner.toLowerCase())
   }, [escrowContract, homeId])
 
   useEffect(() => {
@@ -70,6 +66,10 @@ const useEscrowDetails = (escrowContract?: Contract, homeId?: Home['id']) => {
     hasSold,
     hasLent,
     hasInspected,
+    setHasBought,
+    setHasInspected,
+    setHasLent,
+    setHasSold,
   }
 }
 

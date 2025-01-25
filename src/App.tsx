@@ -1,42 +1,27 @@
+import { type BrowserProvider } from 'ethers'
+
 import { Header } from '@/components/Header'
-import { HomeList } from '@/components/HomeList'
+import Main from '@/components/Main'
 
 import { useBlockchainData, useMetaMask } from './hooks'
-import { AppContextProvider } from './app-context'
-import { useMemo } from 'react'
 
 function App() {
-  const { homes, provider, escrowContract, realEstateContract } =
-    useBlockchainData()
-
   const { account, connect } = useMetaMask()
 
-  const appContextValue = useMemo(
-    () => ({
-      account,
-      provider,
-      escrowContract,
-      realEstateContract,
-    }),
-    [account, provider, escrowContract, realEstateContract],
-  )
+  const { homes, provider, escrowContract } = useBlockchainData()
 
   return (
-    <AppContextProvider value={appContextValue}>
-      <div className="bg-white">
-        <Header account={account} onWalletButtonClick={connect} />
-        <main className="flex flex-col items-center justify-center">
-          <section className="w-full bg-gray-50">
-            <div className="py-32 px-8">
-              <h3 className="text-2xl tracking-tight font-bold capitalize">
-                Homes for you
-              </h3>
-              <HomeList homes={homes} className="mt-6" />
-            </div>
-          </section>
-        </main>
-      </div>
-    </AppContextProvider>
+    <div className="bg-white">
+      <Header account={account} onWalletButtonClick={connect} />
+      {provider && escrowContract && (
+        <Main
+          account={account}
+          homes={homes}
+          provider={provider as BrowserProvider}
+          escrowContract={escrowContract}
+        />
+      )}
+    </div>
   )
 }
 

@@ -7,15 +7,8 @@ import {
 } from '@/components/ui/dialog'
 import Actions from './Actions'
 
-import { useAppContext } from '@/app-context'
-import { useEscrowDetails } from '@/hooks'
-
 const Content = ({ home }: { home: Home }) => {
   const [price] = home.attributes
-
-  const { escrowContract, account } = useAppContext()
-
-  const details = useEscrowDetails(escrowContract, home.id)
 
   return (
     <DialogHeader>
@@ -36,11 +29,7 @@ const Content = ({ home }: { home: Home }) => {
           </DialogDescription>
 
           <div className="mt-6">
-            <Actions
-              account={account}
-              details={details}
-              price={price.value as number}
-            />
+            <Actions homeId={home.id} price={price.value as number} />
           </div>
 
           <hr className="mt-6" />
